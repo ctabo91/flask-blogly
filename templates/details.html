@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}{{user.first_name}} {{user.last_name}} Details{% endblock %}
+
+{% block content %}
+<h1 class="display-3">{{user.first_name}} {{user.last_name}} Details</h1>
+
+<ul>
+    <li>First Name: {{user.first_name}}</li>
+    <li>Last Name: {{user.last_name}}</li>
+    {% if user.image_url %}
+    <li>
+        <img src="{{user.image_url}}" alt="{{user.first_name}} {{user.last_name}}">
+    </li>
+    {% endif %}
+</ul>
+<a href="/users/{{user.id}}/edit" class="btn btn-primary">Edit</a>
+<a href="/users/{{user.id}}/delete" class="btn btn-danger">Delete</a>
+{% endblock %}
