@@ -1,8 +1,7 @@
-"""Blogly application."""
-
+# """Blogly application."""
 from flask import Flask, request, redirect, render_template
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User, Post, Tag, PostTag
+from models import connect_db, db, User, Post, Tag, PostTag
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
@@ -14,7 +13,8 @@ debug = DebugToolbarExtension(app)
 
 
 connect_db(app)
-db.create_all()
+with app.app_context():
+    db.create_all()
 
 
 
@@ -191,7 +191,7 @@ def show_tags():
     return render_template('tag.html', tags=tags)
 
 
-@app.route('/tag/<int:tag_id>')
+@app.route('/tags/<int:tag_id>')
 def show_tag_details(tag_id):
     """Shows details of a particular tag."""
 

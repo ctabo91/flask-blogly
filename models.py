@@ -26,6 +26,8 @@ class User(db.Model):
     
     image_url = db.Column(db.String(50))
 
+    posts = db.relationship("Post", backref="user", cascade="all, delete-orphan")
+
     @property
     def full_name(self):
         """Takes first_name and last_name columns and combines them to get the user's full name."""
@@ -54,13 +56,8 @@ class Post(db.Model):
                            default=datetime.datetime.now)
     
     user_id = db.Column(db.Integer,
-                        db.ForeignKey('users.id'))
-    
-    user = db.relationship('User', backref='posts')
-
-    tags = db.relationship('Tag',
-                           secondary='posts_tags',
-                           backref='posts')
+                        db.ForeignKey('users.id'),
+                        nullable=False)
 
 
 
@@ -89,3 +86,10 @@ class Tag(db.Model):
     name = db.Column(db.String(50),
                      nullable=False,
                      unique=True)
+    
+    posts = db.relationship(
+        'Post',
+        secondary="posts_tags",
+        # cascade="all,delete",
+        backref="tags",
+    )
