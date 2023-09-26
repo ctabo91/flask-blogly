@@ -9,6 +9,8 @@ def connect_db(app):
     db.init_app(app)
 
 
+
+# User Model:
 class User(db.Model):
     __tablename__ = 'users'
 
@@ -32,7 +34,7 @@ class User(db.Model):
 
 
 
-
+# Post Model:
 class Post(db.Model):
     __tablename__ = 'posts'
 
@@ -54,4 +56,36 @@ class Post(db.Model):
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.id'))
     
-    users = db.relationship('User', backref='posts')
+    user = db.relationship('User', backref='posts')
+
+    tags = db.relationship('Tag',
+                           secondary='posts_tags',
+                           backref='posts')
+
+
+
+# PostTag Model:
+class PostTag(db.Model):
+    __tablename__ = 'posts_tags'
+
+    post_id = db.Column(db.Integer,
+                        db.ForeignKey('posts.id'),
+                        primary_key=True)
+    
+    tag_id = db.Column(db.Integer,
+                        db.ForeignKey('tags.id'),
+                        primary_key=True)
+
+
+
+# Tag Model:
+class Tag(db.Model):
+    __tablename__ = 'tags'
+
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
+    
+    name = db.Column(db.String(50),
+                     nullable=False,
+                     unique=True)
